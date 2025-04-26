@@ -51,12 +51,21 @@ jobs:
                 sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.7/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
                 sudo chmod +x /usr/local/bin/docker-compose
             fi
-            
+
             docker --version
             docker-compose --version
-            docker login avantibootcamp.azurecr.io -u ${{ secrets.AZURE_ACR_USERNAME }} -p ${{ secrets.AZURE_ACR_PASSWORD }}
+
+            echo "${{ secrets.AZURE_ACR_PASSWORD }}" | docker login avantibootcamp.azurecr.io -u ${{ secrets.AZURE_ACR_USERNAME }} --password-stdin
+
+            if [ ! -d "/opt/coin-manager/.git" ]; then
+              git clone https://<TOKEN>@github.com/<ORG>/<REPO>.git /opt/coin-manager
+            else
+              cd /opt/coin-manager
+              git pull origin main
+            fi
+        
             cd /opt/coin-manager
-            git pull origin main
+
             docker-compose pull
             docker pull avantibootcamp.azurecr.io/coin-manager-backend
             docker pull avantibootcamp.azurecr.io/coin-manager-frontend
