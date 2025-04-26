@@ -32,9 +32,9 @@ jobs:
 
       - name: Debug SSH Variables
         run: |
-          if [ -z "${{ secrets.AZURE_VM_IP }}" ]; then echo "AZURE_VM_IP está vazio!"; else echo "AZURE_VM_IP definido."; fi
+          if [ -z "${{ secrets.AZURE_VM_HOST }}" ]; then echo "AZURE_VM_IP está vazio!"; else echo "AZURE_VM_IP definido."; fi
           if [ -z "${{ secrets.AZURE_VM_USER }}" ]; then echo "AZURE_VM_USER está vazio!"; else echo "AZURE_VM_USER definido."; fi
-          if [ -z "${{ secrets.AZURE_VM_SSH_KEY }}" ]; then echo "AZURE_VM_SSH_KEY está vazio!"; else echo "AZURE_VM_SSH_KEY definido."; fi
+          if [ -z "${{ secrets.AZURE_SSH_PRIVATE_KEY }}" ]; then echo "AZURE_VM_SSH_KEY está vazio!"; else echo "AZURE_VM_SSH_KEY definido."; fi
         
  
       - name: Deploy to Azure VM via SSH
@@ -42,7 +42,7 @@ jobs:
         with:
           host: 20.120.242.63
           username: superuser
-          key: ${{ secrets.AZURE_VM_SSH_KEY }}
+          key: ${{ secrets.AZURE_SSH_PRIVATE_KEY }}
           port: 22
           script: |
             docker --version
