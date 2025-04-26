@@ -36,6 +36,7 @@ jobs:
           host: ${{ secrets.AZURE_VM_IP }}
           username: ${{ secrets.AZURE_VM_USER }}
           key: ${{ secrets.AZURE_VM_SSH_KEY }}
+          port: 22
           script: |
             docker pull avantibootcamp.azurecr.io/coin-manager-backend
             docker pull avantibootcamp.azurecr.io/coin-manager-frontend
