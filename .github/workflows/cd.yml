@@ -51,8 +51,13 @@ jobs:
                 sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.7/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
                 sudo chmod +x /usr/local/bin/docker-compose
             fi
+            
             docker --version
             docker-compose --version
+            docker login avantibootcamp.azurecr.io -u ${{ secrets.AZURE_ACR_USERNAME }} -p ${{ secrets.AZURE_ACR_PASSWORD }}
+            cd /opt/coin-manager
+            git pull origin main
+            docker-compose pull
             docker pull avantibootcamp.azurecr.io/coin-manager-backend
             docker pull avantibootcamp.azurecr.io/coin-manager-frontend
             docker-compose -f /opt/coin-manager/docker-compose.yml up -d
