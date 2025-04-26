@@ -69,4 +69,4 @@ jobs:
             docker-compose pull
             docker pull avantibootcamp.azurecr.io/coin-manager-backend
             docker pull avantibootcamp.azurecr.io/coin-manager-frontend
-            docker-compose -f /opt/coin-manager/docker-compose.yml up -d
+            docker-compose -f docker-compose.yml up -d
