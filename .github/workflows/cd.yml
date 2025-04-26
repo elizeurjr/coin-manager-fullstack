@@ -27,7 +27,7 @@ jobs:
 
       - name: Build and push frontend (nginx)
         run: |
-          docker build -t avantibootcamp.azurecr.io/coin-manager-frontend ./nginx
+          docker build -t avantibootcamp.azurecr.io/coin-manager-frontend .
           docker push avantibootcamp.azurecr.io/coin-manager-frontend
 
       - name: Debug SSH Variables
