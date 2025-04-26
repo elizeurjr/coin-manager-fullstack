@@ -45,7 +45,8 @@ jobs:
           key: ${{ secrets.AZURE_SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            # Instala docker-compose v2 caso necessário
+            echo "Deploying to Azure VM..."
+
             if ! command -v docker-compose &> /dev/null; then
                 sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.7/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
                 sudo chmod +x /usr/local/bin/docker-compose
@@ -54,4 +55,4 @@ jobs:
             docker-compose --version
             docker pull avantibootcamp.azurecr.io/coin-manager-backend
             docker pull avantibootcamp.azurecr.io/coin-manager-frontend
-            docker-compose -f /caminho/para/docker-compose.yml up -d
+            docker-compose -f /opt/coin-manager/docker-compose.yml up -d
