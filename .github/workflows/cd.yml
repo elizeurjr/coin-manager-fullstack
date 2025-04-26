@@ -55,20 +55,19 @@ jobs:
             docker --version
             docker-compose --version
 
-            echo "${{ secrets.AZURE_ACR_PASSWORD }}" | docker login avantibootcamp.azurecr.io -u ${{ secrets.AZURE_ACR_USERNAME }} --password-stdin
+            echo "Logando no ACR..."
+            echo "${{ secrets.AZURE_ACR_PASSWORD }}" | sudo docker login avantibootcamp.azurecr.io -u ${{ secrets.AZURE_ACR_USERNAME }} --password-stdin
 
-            if [ ! -d "/opt/coin-manager/.git" ]; then
-            set +x
-              git clone https://${{ secrets.GH_DEPLOY_TOKEN }}@github.com/elizeurjr/coin-manager-fullstack.git /opt/coin-manager
-            set -x
-              else
-              cd /opt/coin-manager
-              git pull origin main
-            fi
-        
+            echo "Atualizando código fonte..."
+            sudo rm -rf /opt/coin-manager
+            sudo git clone https://${{ secrets.GH_DEPLOY_TOKEN }}@github.com/elizeurjr/coin-manager-fullstack.git /opt/coin-manager
             cd /opt/coin-manager
 
+            echo "Atualizando imagens..."
             sudo docker-compose pull
             sudo docker pull avantibootcamp.azurecr.io/coin-manager-backend
             sudo docker pull avantibootcamp.azurecr.io/coin-manager-frontend
-            sudo docker-compose -f docker-compose.yml up -d
+
+            echo "Subindo containers..."
+            sudo docker-compose -f /opt/coin-manager/docker-compose.yml up -d
+
