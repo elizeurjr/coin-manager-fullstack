@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 version: '3.9'
 services:
   postgres-test:
@@ -34,3 +35,41 @@ volumes:
 
 networks:
   test-net:
+=======
+version: '3.9'
+services:
+  postgres-test:
+    image: postgres:17-alpine
+    container_name: coin_manager_test_db
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: coin_manager_test
+    volumes:
+      - pgdata-test:/var/lib/postgresql/data
+    networks:
+      - test-net
+
+  node-test:
+    build: ./back-end
+    container_name: node-test
+    depends_on:
+      - postgres-test
+    env_file:
+      - ./back-end/.env.test
+    command: >
+      sh -c "npx prisma generate &&
+             npx prisma migrate deploy &&
+             npm run test"
+    networks:
+      - test-net
+
+volumes:
+  pgdata-test:
+
+networks:
+  test-net:
+>>>>>>> f8635ec35210507233f94112cb7aa20c22387894
