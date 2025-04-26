@@ -1,0 +1,50 @@
+name: Pull Request on Github
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  PullRequest-GitHub:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository Code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'lts/*'
+
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Create .env file
+        run: |
+          echo "DATABASE_URL=postgresql://postgres:root@localhost:5433/coin_manager_test?schema=public" >> back-end/.env
+          echo "PORT=5000" >> back-end/.env
+          echo "JWT_SECRET=top_secret" >> back-end/.env 
+
+      - name: Run Tests with Docker Compose
+        run: |
+          docker-compose -f docker-compose-test.yml up -d --build
+
+      - name: Run Prisma Commands and Tests
+        run: | 
+          npm install
+          npx prisma migrate deploy     
+          npm run test
+        working-directory: back-end
+
+      - name: Clean up Docker
+        run: docker-compose -f docker-compose-test.yml down
+
+
+
